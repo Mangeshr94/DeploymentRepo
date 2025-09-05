@@ -1,0 +1,27 @@
+name: Deploy to Target Org
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Target Org
+        run: echo "${{ secrets.SFDX_AUTH_URL }}" > auth-url.txt
+      - run: sf org login sfdx-url --sfdx-url-file auth-url.txt --alias TargetOrg --set-default
+
+      - name: Deploy metadata to Target Org
+        run: sf project deploy start --target-org TargetOrg --ignore-warnings
+
+      - name: Run Apex Tests (optional)
+        run: sf apex run test --target-org TargetOrg --result-format human
