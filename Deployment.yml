@@ -1,0 +1,32 @@
+name: Deploy to Salesforce
+
+on:
+  push:
+    branches:
+      - main   # Deploy when main branch receives commit
+
+jobs:
+  deploy:
+    runs-on: self-hosted   # Use your self-hosted runner
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Salesforce
+        shell: cmd
+        run: |
+          echo %SF_SERVER_KEY% > server.key
+          sfdx auth:jwt:grant ^
+            --clientid %SF_CONSUMER_KEY% ^
+            --jwtkeyfile server.key ^
+            --username %SF_USERNAME% ^
+            --instanceurl %SFDX_AUTH_URL% ^
+            --setdefaultusername
+
+      - name: Deploy Metadata
+        shell: cmd
+        run: |
+          sfdx force:source:deploy ^
+            --sourcepath force-app ^
+            --testlevel RunLocalTests
