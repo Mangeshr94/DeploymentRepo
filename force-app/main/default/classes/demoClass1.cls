@@ -1,7 +1,6 @@
 /**
  * This class is used for creating contacts for the given list of accounts and updating the account description to 'Completed'.
-    Version: 2.0
-    Last Modified: 2024-06-10
+    Version: 1.0
  */
 public with Sharing class demoClass1 {
 /**
