@@ -9,7 +9,7 @@ public with Sharing class DemoClass1 {
     public static void createContacts(List<Account> accounts){
 List<Contact> contactsToInsert = new List<Contact>();
 List<Account> accountsToUpdate = new List<Account>();
-        for(Account acc : accounts){\
+        for(Account acc : accounts){
             Contact con = new Contact();
             con.LastName = acc.Name;
             con.AccountId = acc.Id;
